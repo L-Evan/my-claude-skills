@@ -17,14 +17,15 @@
 
 ## 🎬 Veo 3.1 视频生成价格
 
-### kie.ai Credits 消耗
+### kie.ai Credits 消耗 (2025-01-27 确认)
 
 | 模型 | kie.ai Credits | USD 成本 | 说明 |
 |------|---------------|---------|------|
-| **Veo 3.1 Fast** | 20 credits | $0.10 | 快速模式，2-3分钟 |
-| **Veo 3.1 Quality** | 150 credits | $0.75 | 高质量模式，3-5分钟 |
+| **Veo 3.1 Fast** | 60 credits | $0.30 | 快速模式，2-3分钟 |
+| **Veo 3.1 Quality** | 250 credits | $1.25 | 高质量模式，3-5分钟 |
+| **1080p 升级** | 30 credits | $0.15 | 高清升级 |
 
-**成本差异**: Quality 模式是 Fast 模式的 **7.5 倍**
+**成本差异**: Quality 模式是 Fast 模式的 **4.17 倍**
 
 ### 成本对比
 
@@ -32,12 +33,12 @@
 100 个视频生成成本：
 
 Fast 模式:
-100 × $0.10 = $10.00
-需要 2,000 kie.ai credits
+100 × $0.30 = $30.00
+需要 6,000 kie.ai credits
 
 Quality 模式:
-100 × $0.75 = $75.00
-需要 15,000 kie.ai credits
+100 × $1.25 = $125.00
+需要 25,000 kie.ai credits
 ```
 
 ---
@@ -94,16 +95,16 @@ const MARKUP_RATE = 1.5;  // 50% 利润率
 
 const COST_CONFIG = {
   veo3_fast: {
-    siteCredits: Math.ceil(20 * MARKUP_RATE),    // 30 credits
-    kieCredits: 20,
-    usdCost: 0.10,
-    revenue: 0.05           // $0.05 利润
+    siteCredits: Math.ceil(60 * MARKUP_RATE),    // 90 credits
+    kieCredits: 60,
+    usdCost: 0.30,
+    revenue: 0.15           // $0.15 利润
   },
   veo3: {
-    siteCredits: Math.ceil(150 * MARKUP_RATE),   // 225 credits
-    kieCredits: 150,
-    usdCost: 0.75,
-    revenue: 0.375          // $0.375 利润
+    siteCredits: Math.ceil(250 * MARKUP_RATE),   // 375 credits
+    kieCredits: 250,
+    usdCost: 1.25,
+    revenue: 0.625          // $0.625 利润
   }
 };
 ```
@@ -119,13 +120,13 @@ const COST_CONFIG = {
 const COST_CONFIG = {
   veo3_fast: {
     siteCredits: 1,         // 用户消耗 1 credit
-    kieCredits: 20,         // kie.ai 消耗 20 credits
-    usdCost: 0.10
+    kieCredits: 60,         // kie.ai 消耗 60 credits
+    usdCost: 0.30
   },
   veo3: {
     siteCredits: 5,         // 用户消耗 5 credits
-    kieCredits: 150,        // kie.ai 消耗 150 credits
-    usdCost: 0.75
+    kieCredits: 250,        // kie.ai 消耗 250 credits
+    usdCost: 1.25
   }
 };
 
@@ -133,18 +134,18 @@ const COST_CONFIG = {
 const USER_PACKAGES = {
   basic: {
     siteCredits: 10,
-    price: 2.00,            // $2 = 10 credits = 10 个 Fast 视频
-    kieCreditsRequired: 200
+    price: 6.00,            // $6 = 10 credits = 10 个 Fast 视频
+    kieCreditsRequired: 600
   },
   pro: {
     siteCredits: 100,
-    price: 15.00,           // $15 = 100 credits = 100 个 Fast 视频
-    kieCreditsRequired: 2000
+    price: 45.00,           // $45 = 100 credits = 100 个 Fast 视频
+    kieCreditsRequired: 6000
   },
   premium: {
     siteCredits: 1000,
-    price: 120.00,          // $120 = 1000 credits
-    kieCreditsRequired: 20000
+    price: 360.00,          // $360 = 1000 credits
+    kieCreditsRequired: 60000
   }
 };
 ```
@@ -169,15 +170,15 @@ export const VIDEO_PRICING = {
   fast: {
     displayName: 'Fast 模式',
     userCredits: 1,           // 用户看到：消耗 1 credit
-    kieCredits: 20,           // 实际消耗 20 kie.ai credits
-    usdCost: 0.10,
+    kieCredits: 60,           // 实际消耗 60 kie.ai credits
+    usdCost: 0.30,
     estimatedTime: '2-3分钟'
   },
   quality: {
     displayName: 'Quality 模式',
     userCredits: 5,           // 用户看到：消耗 5 credits
-    kieCredits: 150,          // 实际消耗 150 kie.ai credits
-    usdCost: 0.75,
+    kieCredits: 250,          // 实际消耗 250 kie.ai credits
+    usdCost: 1.25,
     estimatedTime: '3-5分钟'
   }
 };
@@ -300,8 +301,8 @@ console.log(`
 `);
 // 输出：
 // 用户消耗: 100 credits
-// kie.ai 消耗: 2000 credits
-// 实际成本: $10
+// kie.ai 消耗: 6000 credits
+// 实际成本: $30
 ```
 
 ### 利润计算
@@ -342,9 +343,9 @@ console.log(`
 `);
 // 输出：
 // 收入: $24.99
-// 成本: $16.00  (160 × $0.10)
-// 利润: $8.99
-// 利润率: 35.97%
+// 成本: $48.00  (160 × $0.30)
+// 利润: -$23.01
+// 利润率: -92.09% 🔴 严重亏损
 ```
 
 ---

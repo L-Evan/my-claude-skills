@@ -49,39 +49,42 @@ interface CostConfig {
   };
 }
 
-// 配置实际成本（从 kie.ai 控制台获取）
-const COST_CONFIG: CostConfig = {
-  veo3: {
-    textToVideo: 100,         // TODO: 填入实际值
-    imageToVideo: 120,        // TODO: 填入实际值
-    resolution1080p: 1.5,     // 1080p 倍数
-  },
+// 配置实际成本（2025-01-27 确认）
+const COST_CONFIG = {
   veo3_fast: {
-    textToVideo: 50,          // TODO: 填入实际值
-    imageToVideo: 60,         // TODO: 填入实际值
-    resolution1080p: 1.3,
+    textToVideo: 60,          // kie.ai credits
+    imageToVideo: 60,         // kie.ai credits
+    usdCost: 0.30,
+  },
+  veo3: {
+    textToVideo: 250,         // kie.ai credits (Quality mode)
+    imageToVideo: 250,        // kie.ai credits
+    usdCost: 1.25,
+  },
+  resolution1080p: {
+    credits: 30,              // kie.ai credits (升级费用)
+    usdCost: 0.15,
   }
 };
 
 export function estimateVideoCost(params: {
   model: 'veo3' | 'veo3_fast';
   generationType: 'TEXT_2_VIDEO' | 'FIRST_AND_LAST_FRAMES_2_VIDEO' | 'REFERENCE_2_VIDEO';
-  aspectRatio: '16:9' | '9:16' | 'Auto';
-}): number {
-  const baseConfig = COST_CONFIG[params.model];
+  upgrade1080p?: boolean;
+}): { kieCredits: number; usdCost: number } {
+  const config = COST_CONFIG[params.model];
 
-  // 基础成本
-  let baseCost = baseConfig.textToVideo;
-  if (params.generationType !== 'TEXT_2_VIDEO') {
-    baseCost = baseConfig.imageToVideo;
+  // 基础成本 (Text-to-Video 和 Image-to-Video 成本相同)
+  let kieCredits = config.textToVideo;
+  let usdCost = config.usdCost;
+
+  // 1080p 升级费用
+  if (params.upgrade1080p) {
+    kieCredits += COST_CONFIG.resolution1080p.credits;
+    usdCost += COST_CONFIG.resolution1080p.usdCost;
   }
 
-  // 分辨率倍数（16:9 默认 1080p）
-  if (params.aspectRatio === '16:9') {
-    baseCost *= baseConfig.resolution1080p;
-  }
-
-  return Math.ceil(baseCost);
+  return { kieCredits, usdCost };
 }
 ```
 
