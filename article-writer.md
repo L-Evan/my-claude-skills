@@ -101,7 +101,7 @@
   locale: 'zh' | 'en',       // 语言
   category_uuid: string,     // 分类UUID
   cover_url?: string,        // 封面图（默认：/imgs/blog/default.jpg）
-  author_name?: string,      // 作者（默认：TryVeo3.ai）
+  author_name?: string,      // 作者（默认：trygempix2.pro）
   author_avatar_url?: string, // 头像（默认：/imgs/users/1.png）
   created_at: timestamp,     // 创建时间
   updated_at: timestamp      // 更新时间
@@ -166,7 +166,7 @@ async function createArticle() {
     category_uuid: 'ai-tech-category',
     status: 'online',
     cover_url: '/imgs/blog/default.jpg',
-    author_name: 'TryVeo3.ai',
+    author_name: 'trygempix2.pro',
     author_avatar_url: '/imgs/users/1.png',
   };
 
@@ -296,7 +296,7 @@ async function createArticles() {
         NOW(),
         'online',
         '/imgs/blog/default.jpg',
-        'TryVeo3.ai',
+        'trygempix2.pro',
         '/imgs/users/1.png',
         ${article.locale},
         ${article.category_uuid}
@@ -893,7 +893,7 @@ VALUES (
 
 **设置默认作者**
 ```typescript
-author_name: 'TryVeo3.ai',
+author_name: 'trygempix2.pro',
 author_avatar_url: '/imgs/users/1.png'
 ```
 
@@ -1288,12 +1288,12 @@ INSERT INTO posts (
 总结文章的核心信息和行动呼吁。
 
 ---
-*作者: TryVeo3.ai*',
+*作者: trygempix2.pro*',
   NOW(),
   NOW(),
   'online',
   '/imgs/blog/example.jpg',
-  'TryVeo3.ai',
+  'trygempix2.pro',
   '/imgs/users/1.png',
   'zh',
   'ai-tech-category'
@@ -1385,7 +1385,7 @@ Claude 自动完成：内容生成 → SEO 优化 → 写入数据库 → 提供
 - **版本**: v3.0.0-ai-powered
 - **更新日期**: 2025-01-11
 - **变更摘要**: 完全重构为 AI 驱动的工作流，使用 MCP 工具自动化文章创作和数据库操作
-- **维护者**: TryVeo3.ai Team
+- **维护者**: trygempix2.pro Team
 
 ---
 
