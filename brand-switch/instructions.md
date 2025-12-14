@@ -56,8 +56,77 @@ Create a new brand configuration for this project by:
    - Verify all files created/updated
    - Show summary of changes
 
-9. **Next Steps Reminder**
-   Display clear checklist to user with file paths and commands
+9. **SEO Structured Data Setup** ⭐
+   **Critical**: Every new brand/landing page MUST have complete SEO structured data.
+
+   Reference: `docs/NEW_LANDING_PAGE_CHECKLIST.md`
+
+   Required Schema Components (create in `src/components/seo/`):
+   - `{brand}-web-app-schema.tsx` → WebApplication Schema
+   - `{brand}-product-schema.tsx` → Product Schema
+   - `{brand}-howto-schema.tsx` → HowTo Schema
+   - `{brand}-review-schema.tsx` → Review Schema
+   - Reuse existing `FAQSchema` component
+
+   Integration Steps:
+   a. **Create Schema Files**
+      ```bash
+      # Use Tattoo implementation as template
+      src/components/seo/tattoo-*.tsx
+      ```
+
+   b. **Export Schemas** (update `src/components/seo/index.ts`)
+      ```typescript
+      export { BrandWebAppSchema } from "./{brand}-web-app-schema";
+      export { BrandProductSchema } from "./{brand}-product-schema";
+      // ... etc
+      ```
+
+   c. **Integrate into Page** (in brand's main client component)
+      ```typescript
+      import {
+        BrandWebAppSchema,
+        BrandProductSchema,
+        BrandHowToSchema,
+        BrandReviewSchema,
+        FAQSchema
+      } from '@/components/seo';
+
+      export default function BrandPageClient() {
+        const siteUrl = typeof window !== 'undefined'
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_WEB_URL;
+
+        return (
+          <div>
+            {/* Structured Data - MUST HAVE! */}
+            <BrandWebAppSchema url={siteUrl} />
+            <BrandProductSchema url={siteUrl} />
+            <BrandHowToSchema url={siteUrl} />
+            <BrandReviewSchema url={siteUrl} />
+            <FAQSchema questions={faqData} />
+
+            {/* Page content */}
+          </div>
+        );
+      }
+      ```
+
+   d. **Verify Schema**
+      - Check page source for `<script type="application/ld+json">`
+      - Test with: https://search.google.com/test/rich-results
+      - Lighthouse SEO score should be ≥ 90
+
+   Schema Data Sources:
+   - FAQ questions → from FAQ section in landing page
+   - Reviews → from Testimonials section
+   - HowTo steps → from "How It Works" section
+   - Ratings → use real data (e.g., "4.9", "3 reviews")
+
+   **DO NOT SKIP THIS STEP** - Missing structured data severely impacts SEO!
+
+10. **Next Steps Reminder**
+    Display clear checklist to user with file paths and commands
 
 # Important Rules
 
@@ -82,6 +151,73 @@ Create a new brand configuration for this project by:
 - Use `Edit` for updating existing files
 - Use `Write` for creating new files
 - Use `Read` to check current state
+
+---
+
+# 中文说明：SEO 结构化数据配置
+
+## 为什么必须配置 SEO Structured Data？
+
+每个新品牌/落地页**必须**包含完整的 JSON-LD structured data（结构化数据），原因：
+
+1. **Google 富媒体搜索结果** - 显示评分⭐、FAQ❓、使用步骤📋
+2. **SEO 排名提升** - Google 更容易理解页面内容
+3. **点击率提升** - 富媒体展示比普通结果更吸引眼球
+
+## 必需的 Schema 类型
+
+| Schema 类型 | 用途 | 数据来源 |
+|------------|------|---------|
+| WebApplication | 描述应用类型、价格、评分 | 品牌信息 + 用户评分 |
+| Product | 产品/服务描述 | 品牌描述 + 价格信息 |
+| HowTo | 使用步骤教程 | "How It Works" 部分 |
+| Review | 用户评价 | Testimonials 部分 |
+| FAQPage | 常见问题 | FAQ 部分 |
+
+## 快速创建步骤
+
+1. **复制模板**
+   ```bash
+   # 从 Tattoo 页面复制 Schema 模板
+   cp src/components/seo/tattoo-*.tsx src/components/seo/{新品牌}-*.tsx
+   ```
+
+2. **全局替换**
+   - `Tattoo` → `{NewBrand}`
+   - `tattoo` → `{new-brand}`
+   - 更新具体的业务数据（FAQ、评价、步骤）
+
+3. **导出组件**
+   在 `src/components/seo/index.ts` 中添加导出
+
+4. **集成到页面**
+   在品牌的主客户端组件中渲染所有 Schema
+
+5. **验证**
+   - 页面源代码包含 5 个 `<script type="application/ld+json">`
+   - Google Rich Results Test 通过
+   - Lighthouse SEO ≥ 90 分
+
+## 常见错误
+
+❌ **忘记添加 Schema** → SEO 效果差
+❌ **硬编码数据** → Schema 与页面内容不一致
+❌ **类型错误** → `ratingValue` 必须是字符串 `"4.9"` 不是数字
+❌ **URL 不一致** → canonical URL 与 schema URL 不匹配
+
+✅ **正确做法**：
+- 从页面内容提取真实数据
+- 使用 `schema-dts` 类型定义
+- 保持 URL 统一
+
+## 完整示例
+
+参考实现：
+- Schema 组件：`src/components/seo/tattoo-*.tsx`
+- 页面集成：`src/components/pages/tattoo/TattooPageClient.tsx:86-90`
+- 完整清单：`docs/NEW_LANDING_PAGE_CHECKLIST.md`
+
+---
 
 # Example Flow
 
