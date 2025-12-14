@@ -125,8 +125,268 @@ Create a new brand configuration for this project by:
 
    **DO NOT SKIP THIS STEP** - Missing structured data severely impacts SEO!
 
-10. **Next Steps Reminder**
-    Display clear checklist to user with file paths and commands
+10. **External Services Setup** 🔔
+    **REMINDER ONLY** - These require manual configuration:
+
+    a. **Google OAuth Authentication**
+       - Create OAuth 2.0 Client ID in Google Cloud Console
+       - Set authorized redirect URIs for new domain
+       - Update `.env.local`: `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`
+       - Enable in config: `NEXT_PUBLIC_AUTH_GOOGLE_ENABLED=true`
+
+    b. **Google Analytics**
+       - Create new GA4 property for the brand
+       - Get Measurement ID (G-XXXXXXXXXX)
+       - Update `.env.local`: `NEXT_PUBLIC_GOOGLE_ANALYTICS_ID`
+       - Verify tracking in GA4 real-time reports
+
+    c. **Domain Configuration**
+       - Register new domain (e.g., via Namecheap, GoDaddy)
+       - Configure DNS records in domain registrar
+       - Add domain to Vercel project settings
+       - Set up SSL certificate (usually automatic)
+       - Update `src/config/brand.config.ts` with new domain
+
+    d. **Brand Logo**
+       - Create logo files (SVG recommended for scalability)
+       - Save to `public/images/{brand}/` directory
+       - Update paths in `src/config/brand.config.ts`
+       - Recommended sizes:
+         - Logo: SVG or PNG (transparent background)
+         - Favicon: 32x32, 16x16 (ICO format)
+         - Apple Touch Icon: 180x180 PNG
+
+    e. **Yandex Webmaster Verification**
+       - Add site to Yandex Webmaster Tools
+       - Get verification meta tag
+       - Add to page metadata in main layout or root page
+       - Verify ownership
+
+    **Action**: After brand config is complete, remind user to complete these manual steps.
+
+11. **Multi-language Translation** 🌍
+    Build landing page translations for all supported locales.
+
+    **Supported Locales** (from `src/i18n/locale.ts`):
+    - ar (العربية), de (Deutsch), en (English), es (Español)
+    - zh (简体中文), fr (Français), it (Italiano), ja (日本語)
+    - ko (한국어), nl (Nederlands), pt (Português), ru (Русский), tr (Türkçe)
+
+    **Translation Workflow**:
+
+    a. **Identify Content Structure**
+       - Read existing `src/i18n/pages/{brand}/landing/en.json`
+       - Note all sections: hero, features, pricing, faq, testimonials, cta
+
+    b. **Create Translation Files**
+       ```bash
+       mkdir -p src/i18n/pages/{brand}/landing/
+       # Create files for all 13 locales
+       for locale in ar de en es zh fr it ja ko nl pt ru tr; do
+         touch src/i18n/pages/{brand}/landing/${locale}.json
+       done
+       ```
+
+    c. **Translation Priority**
+       1. **Primary**: en, zh (English and Chinese first)
+       2. **Secondary**: es, fr, de, ja (major markets)
+       3. **Tertiary**: remaining locales
+
+    d. **Translation Methods**
+       - **Option 1**: Manual translation (highest quality)
+       - **Option 2**: Professional translation service (Gengo, DeepL Pro)
+       - **Option 3**: AI-assisted translation (ChatGPT/Claude + human review)
+       - **IMPORTANT**: Always review AI translations for cultural context
+
+    e. **Key Translation Considerations**
+       - Brand name: Usually keep in English or transliterate
+       - SEO keywords: Research locale-specific search terms
+       - CTAs: Use culturally appropriate calls-to-action
+       - Pricing: Keep in USD or convert to local currency
+       - Legal terms: May require professional legal translation
+
+    f. **Validation**
+       - Check for missing keys (all locales should have same structure)
+       - Verify special characters render correctly
+       - Test RTL languages (Arabic) layout
+       - Review with native speakers when possible
+
+    **Action**: Create translation files for primary locales (en, zh) first, then expand.
+
+12. **Legal Pages Creation** ⚖️
+    Create required legal documentation pages for the brand.
+
+    **Required Pages**:
+    - Privacy Policy
+    - Terms of Service
+    - Refund Policy
+
+    **Implementation Steps**:
+
+    a. **Create Route Files**
+       ```bash
+       mkdir -p src/app/[locale]/(default)/{privacy-policy,terms-of-service,refund-policy}
+       touch src/app/[locale]/(default)/privacy-policy/page.tsx
+       touch src/app/[locale]/(default)/terms-of-service/page.tsx
+       touch src/app/[locale]/(default)/refund-policy/page.tsx
+       ```
+
+    b. **Create i18n Content**
+       ```bash
+       mkdir -p src/i18n/pages/{brand}/{privacy,terms,refund}
+       # Create for primary locales first
+       for locale in en zh; do
+         touch src/i18n/pages/{brand}/privacy/${locale}.json
+         touch src/i18n/pages/{brand}/terms/${locale}.json
+         touch src/i18n/pages/{brand}/refund/${locale}.json
+       done
+       ```
+
+    c. **Content Guidelines**
+
+       **Privacy Policy** should include:
+       - Data collection practices
+       - Cookie usage
+       - Third-party services (Google Analytics, payment processors)
+       - User rights (GDPR, CCPA compliance)
+       - Contact information for privacy inquiries
+
+       **Terms of Service** should include:
+       - Service description
+       - User responsibilities
+       - Intellectual property rights
+       - Limitation of liability
+       - Dispute resolution
+       - Governing law
+
+       **Refund Policy** should include:
+       - Refund eligibility (time frame, conditions)
+       - Refund process
+       - Exceptions (digital goods, used credits)
+       - Processing time
+       - Contact for refund requests
+
+    d. **Templates & Tools**
+       - Use existing brand pages as template
+       - Consider tools: TermsFeed, iubenda, Termly (for generation)
+       - **IMPORTANT**: Have legal professional review before publishing
+       - Update date stamps when policies change
+
+    e. **Link Integration**
+       - Add links to footer component (`src/components/Footer.tsx`)
+       - Add to sitemap (see Step 13)
+       - Include in signup/checkout flows where required
+
+    **Action**: Create legal pages, review with legal counsel, integrate into navigation.
+
+13. **Sitemap Strategy** 🗺️
+    Implement gradual sitemap updates to ensure proper SEO indexing.
+
+    **Sitemap Evolution Stages**:
+
+    **Stage 1: Single Landing Page** (Initial Launch)
+    ```xml
+    <url>
+      <loc>https://{domain}/</loc>
+      <lastmod>2025-01-15</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
+    ```
+
+    **Stage 2: Multi-language Landing Page**
+    ```xml
+    <!-- Add 13 locale versions -->
+    <url>
+      <loc>https://{domain}/en</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://{domain}/en"/>
+      <xhtml:link rel="alternate" hreflang="zh" href="https://{domain}/zh"/>
+      <!-- ... other locales -->
+      <priority>1.0</priority>
+    </url>
+    ```
+
+    **Stage 3: Additional Pages** (Pricing, Showcase, Legal)
+    ```xml
+    <url>
+      <loc>https://{domain}/pricing</loc>
+      <priority>0.8</priority>
+    </url>
+    <url>
+      <loc>https://{domain}/privacy-policy</loc>
+      <priority>0.5</priority>
+    </url>
+    ```
+
+    **Stage 4: Brand Switch** (Update when changing brands)
+    - Remove old brand URLs
+    - Add new brand URLs
+    - Update `lastmod` dates
+    - Submit new sitemap to Google Search Console
+
+    **Implementation**:
+
+    a. **Sitemap Location**
+       - File: `public/sitemap.xml` (static) or
+       - Route: `src/app/sitemap.ts` (dynamic, recommended)
+
+    b. **Dynamic Sitemap Example**
+       ```typescript
+       // src/app/sitemap.ts
+       import { getBrandConfig } from '@/lib/brand';
+       import { locales } from '@/i18n/locale';
+
+       export default function sitemap() {
+         const brand = getBrandConfig();
+         const baseUrl = brand.url;
+
+         // Stage 1: Landing pages for all locales
+         const landingPages = locales.map(locale => ({
+           url: `${baseUrl}/${locale}`,
+           lastModified: new Date(),
+           changeFrequency: 'weekly' as const,
+           priority: 1.0,
+         }));
+
+         // Stage 3: Additional pages
+         const additionalPages = [
+           '/pricing',
+           '/showcase',
+           '/privacy-policy',
+           '/terms-of-service',
+           '/refund-policy'
+         ].flatMap(path =>
+           locales.map(locale => ({
+             url: `${baseUrl}/${locale}${path}`,
+             lastModified: new Date(),
+             changeFrequency: 'monthly' as const,
+             priority: 0.8,
+           }))
+         );
+
+         return [...landingPages, ...additionalPages];
+       }
+       ```
+
+    c. **Update Checklist**
+       - [ ] Update `src/app/sitemap.ts` when adding new pages
+       - [ ] Update `lastModified` when content changes significantly
+       - [ ] Submit to Google Search Console after major updates
+       - [ ] Verify with `https://{domain}/sitemap.xml`
+       - [ ] Check for 404s in Google Search Console
+
+    d. **robots.txt Configuration**
+       ```txt
+       # public/robots.txt
+       User-agent: *
+       Allow: /
+       Sitemap: https://{domain}/sitemap.xml
+       ```
+
+    **Action**: Start with Stage 1, expand gradually as content is ready.
+
+14. **Final Checklist & Next Steps**
+    Display complete brand creation summary to user
 
 # Important Rules
 
@@ -216,6 +476,247 @@ Create a new brand configuration for this project by:
 - Schema 组件：`src/components/seo/tattoo-*.tsx`
 - 页面集成：`src/components/pages/tattoo/TattooPageClient.tsx:86-90`
 - 完整清单：`docs/NEW_LANDING_PAGE_CHECKLIST.md`
+
+---
+
+# 中文说明：完整品牌创建工作流
+
+## 工作流概览
+
+创建新品牌需要完成以下4个主要步骤：
+
+### 第1步：品牌配置 + SEO ✅（自动化）
+
+- 品牌配置文件（`brand.config.ts`）
+- 主题CSS（`themes/{brand}.css`）
+- 品牌i18n（`i18n/brand/`）
+- **SEO结构化数据**（5个Schema组件）
+
+**执行方式**：使用此skill自动完成
+
+### 第2步：外部服务配置 🔔（提醒）
+
+需要手动配置的外部服务：
+
+1. **Google OAuth认证**
+   - 在Google Cloud Console创建OAuth 2.0客户端ID
+   - 配置授权重定向URI
+   - 更新环境变量：`AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`
+
+2. **Google Analytics**
+   - 创建GA4属性
+   - 获取Measurement ID（G-XXXXXXXXXX）
+   - 更新环境变量：`NEXT_PUBLIC_GOOGLE_ANALYTICS_ID`
+
+3. **域名配置**
+   - 注册新域名
+   - 配置DNS记录
+   - 在Vercel添加域名
+   - 配置SSL证书（通常自动）
+
+4. **品牌Logo**
+   - 创建SVG/PNG格式logo
+   - 保存到 `public/images/{brand}/`
+   - 更新 `brand.config.ts` 路径
+   - 推荐尺寸：
+     - Logo: SVG（可缩放）
+     - Favicon: 32x32, 16x16 ICO
+     - Apple Touch Icon: 180x180 PNG
+
+5. **Yandex站长验证**
+   - 添加站点到Yandex Webmaster
+   - 获取验证meta标签
+   - 添加到页面元数据
+
+**执行方式**：Skill完成后会显示提醒清单
+
+### 第3步：多语言翻译 🌍（手动/半自动）
+
+为落地页创建13种语言的翻译：
+
+**支持的语言**：
+- ar (العربية), de (Deutsch), en (English), es (Español)
+- zh (简体中文), fr (Français), it (Italiano), ja (日本語)
+- ko (한국어), nl (Nederlands), pt (Português), ru (Русский), tr (Türkçe)
+
+**翻译优先级**：
+1. **主要语言**：en, zh（首先完成）
+2. **次要语言**：es, fr, de, ja（主要市场）
+3. **其他语言**：剩余语言
+
+**翻译方法**：
+- 人工翻译（质量最高）
+- 专业翻译服务（Gengo, DeepL Pro）
+- AI辅助翻译（ChatGPT/Claude + 人工审核）
+
+**翻译注意事项**：
+- 品牌名称：通常保持英文或音译
+- SEO关键词：研究本地化搜索词
+- CTA按钮：使用文化适当的表述
+- 定价：保持USD或转换为当地货币
+- 法律条款：可能需要专业法律翻译
+
+**文件结构**：
+```
+src/i18n/pages/{brand}/landing/
+├── en.json  ← 先完成
+├── zh.json  ← 先完成
+├── es.json
+├── fr.json
+└── ... (其他9种语言)
+```
+
+**验证**：
+- 检查所有语言的JSON结构一致
+- 验证特殊字符显示正常
+- 测试RTL语言（阿拉伯语）布局
+- 有条件的话请母语者审核
+
+### 第4步：法律页面 ⚖️（手动）
+
+创建必需的法律文档页面：
+
+**必需页面**：
+1. **Privacy Policy**（隐私政策）
+   - 数据收集实践
+   - Cookie使用
+   - 第三方服务（Google Analytics, 支付处理）
+   - 用户权利（GDPR, CCPA合规）
+   - 隐私咨询联系方式
+
+2. **Terms of Service**（服务条款）
+   - 服务描述
+   - 用户责任
+   - 知识产权
+   - 责任限制
+   - 争议解决
+   - 适用法律
+
+3. **Refund Policy**（退款政策）
+   - 退款资格（时间范围、条件）
+   - 退款流程
+   - 例外情况（数字商品、已使用积分）
+   - 处理时间
+   - 退款请求联系方式
+
+**实施步骤**：
+
+1. **创建路由文件**：
+   ```bash
+   mkdir -p src/app/[locale]/(default)/{privacy-policy,terms-of-service,refund-policy}
+   ```
+
+2. **创建i18n内容**：
+   ```bash
+   mkdir -p src/i18n/pages/{brand}/{privacy,terms,refund}
+   ```
+
+3. **内容来源**：
+   - 使用现有品牌页面作为模板
+   - 使用工具生成初稿：TermsFeed, iubenda, Termly
+   - ⚠️ **重要**：发布前请法律专业人士审核
+
+4. **集成导航**：
+   - 在Footer组件添加链接
+   - 添加到sitemap
+   - 在注册/结账流程中包含（如需要）
+
+### Sitemap策略 🗺️（逐步添加）
+
+**阶段1：单一落地页**（初始发布）
+```xml
+<url>
+  <loc>https://{domain}/</loc>
+  <priority>1.0</priority>
+</url>
+```
+
+**阶段2：多语言落地页**
+- 添加13种语言版本
+- 使用hreflang标签
+
+**阶段3：其他页面**
+- Pricing
+- Showcase
+- Privacy Policy, Terms, Refund
+
+**阶段4：品牌切换**
+- 移除旧品牌URL
+- 添加新品牌URL
+- 更新lastmod日期
+- 提交到Google Search Console
+
+**实施方式**：
+- 推荐使用动态sitemap（`src/app/sitemap.ts`）
+- 自动读取 `locales` 和 `brandConfig`
+- 每次添加新页面时更新
+
+**robots.txt配置**：
+```txt
+User-agent: *
+Allow: /
+Sitemap: https://{domain}/sitemap.xml
+```
+
+## 完整工作流时间估算
+
+| 步骤 | 预计时间 | 方式 |
+|------|---------|------|
+| 1. 品牌配置 + SEO | 15-20分钟 | 自动（使用此skill） |
+| 2. 外部服务配置 | 30-60分钟 | 手动（按提醒清单） |
+| 3. 多语言翻译（主要） | 2-4小时 | 手动/AI辅助 |
+| 3. 多语言翻译（全部） | 1-2天 | 手动/专业服务 |
+| 4. 法律页面 | 2-4小时 | 模板+法律审核 |
+| **总计** | **1-3天** | **（取决于翻译范围）** |
+
+## 快速启动清单
+
+创建新品牌时按此顺序执行：
+
+- [ ] 第1步：运行brand-switch skill → 自动完成配置+SEO
+- [ ] 第2步：查看提醒清单 → 完成Google OAuth/Analytics/域名/Logo/Yandex
+- [ ] 第3步：翻译en.json和zh.json → 测试两种主要语言
+- [ ] 第4步：创建Privacy/Terms/Refund页面 → 法律审核
+- [ ] 第5步：提交sitemap到Google Search Console
+- [ ] 第6步：扩展剩余11种语言翻译（可选）
+
+## 常见问题
+
+### Q1: 可以跳过某些步骤吗？
+
+**不可跳过**：
+- 第1步（品牌配置+SEO）- 核心功能
+- 第4步（法律页面）- 法律合规要求
+
+**可延后**：
+- 第3步部分语言 - 先完成en/zh，其他语言可后续添加
+- 第2步部分服务 - Yandex可选，其他必需
+
+### Q2: SEO多久能看到效果？
+
+- **Google索引**：1-2周（提交sitemap后）
+- **Rich Results**：2-4周（Schema验证通过后）
+- **排名提升**：1-3个月（取决于内容质量和竞争）
+
+### Q3: 多语言翻译质量如何保证？
+
+**建议流程**：
+1. 使用AI生成初稿
+2. 人工审核关键部分（CTA, SEO关键词）
+3. 母语者最终审核（预算允许）
+4. A/B测试转化率
+
+### Q4: 法律页面必须找律师吗？
+
+**强烈推荐**，因为：
+- 不同地区法律要求不同（GDPR, CCPA等）
+- 错误的法律文档可能导致法律风险
+- 专业审核费用远低于潜在法律诉讼成本
+
+**替代方案**（低预算）：
+- 使用成熟的模板生成工具（iubenda等）
+- 参考知名竞品的条款（但不要抄袭）
+- 定期更新以符合最新法规
 
 ---
 
