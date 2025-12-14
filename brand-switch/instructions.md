@@ -213,71 +213,38 @@ Create a new brand configuration for this project by:
 
     **Action**: Create translation files for primary locales (en, zh) first, then expand.
 
-12. **Legal Pages Creation** ⚖️
-    Create required legal documentation pages for the brand.
+12. **Legal Pages** ⚖️ ✅
+    **ALREADY IMPLEMENTED** - Legal pages are brand-agnostic and auto-configured!
 
-    **Required Pages**:
-    - Privacy Policy
-    - Terms of Service
-    - Refund Policy
+    **Available Pages** (Universal Templates):
+    - `/privacy-policy` - Privacy Policy
+    - `/terms-of-service` - Terms of Service
+    - `/refund-policy` - Refund Policy
 
-    **Implementation Steps**:
+    **How It Works**:
+    - All legal pages automatically read brand information from `src/config/brand.config.ts`
+    - Brand name, domain, contact email, company name are dynamically inserted
+    - **No manual configuration needed** when creating a new brand
+    - Pages are located in `src/app/(legal)/` directory
 
-    a. **Create Route Files**
-       ```bash
-       mkdir -p src/app/[locale]/(default)/{privacy-policy,terms-of-service,refund-policy}
-       touch src/app/[locale]/(default)/privacy-policy/page.tsx
-       touch src/app/[locale]/(default)/terms-of-service/page.tsx
-       touch src/app/[locale]/(default)/refund-policy/page.tsx
-       ```
+    **What Gets Auto-Populated**:
+    - Brand name: `{brandConfig.name}`
+    - Domain: `{brandConfig.domain}`
+    - Support email: `{brandConfig.contact.support}`
+    - Company name: `{brandConfig.legal.companyName}`
 
-    b. **Create i18n Content**
-       ```bash
-       mkdir -p src/i18n/pages/{brand}/{privacy,terms,refund}
-       # Create for primary locales first
-       for locale in en zh; do
-         touch src/i18n/pages/{brand}/privacy/${locale}.json
-         touch src/i18n/pages/{brand}/terms/${locale}.json
-         touch src/i18n/pages/{brand}/refund/${locale}.json
-       done
-       ```
+    **Verification Steps**:
+    - [ ] Visit `/privacy-policy` and verify brand name appears correctly
+    - [ ] Visit `/terms-of-service` and verify brand name appears correctly
+    - [ ] Visit `/refund-policy` and verify brand name appears correctly
+    - [ ] Check footer links to legal pages are working
 
-    c. **Content Guidelines**
+    **Optional Customizations** (Only if needed):
+    - Update effective date in each page file
+    - Modify specific policy terms (requires legal review)
+    - Add brand-specific legal requirements
 
-       **Privacy Policy** should include:
-       - Data collection practices
-       - Cookie usage
-       - Third-party services (Google Analytics, payment processors)
-       - User rights (GDPR, CCPA compliance)
-       - Contact information for privacy inquiries
-
-       **Terms of Service** should include:
-       - Service description
-       - User responsibilities
-       - Intellectual property rights
-       - Limitation of liability
-       - Dispute resolution
-       - Governing law
-
-       **Refund Policy** should include:
-       - Refund eligibility (time frame, conditions)
-       - Refund process
-       - Exceptions (digital goods, used credits)
-       - Processing time
-       - Contact for refund requests
-
-    d. **Templates & Tools**
-       - Use existing brand pages as template
-       - Consider tools: TermsFeed, iubenda, Termly (for generation)
-       - **IMPORTANT**: Have legal professional review before publishing
-       - Update date stamps when policies change
-
-    e. **Link Integration**
-       - Add links to footer component (`src/components/Footer.tsx`)
-       - Add to sitemap (see Step 13)
-       - Include in signup/checkout flows where required
-
-    **Action**: Create legal pages, review with legal counsel, integrate into navigation.
+    **Action**: Verify legal pages display correct brand info, no creation needed!
 
 13. **Sitemap Strategy** 🗺️
     Implement gradual sitemap updates to ensure proper SEO indexing.
@@ -572,54 +539,45 @@ src/i18n/pages/{brand}/landing/
 - 测试RTL语言（阿拉伯语）布局
 - 有条件的话请母语者审核
 
-### 第4步：法律页面 ⚖️（手动）
+### 第4步：法律页面 ⚖️ ✅（已实现）
 
-创建必需的法律文档页面：
+**好消息**：法律页面已经实现为通用模板，自动配置！
 
-**必需页面**：
-1. **Privacy Policy**（隐私政策）
-   - 数据收集实践
-   - Cookie使用
-   - 第三方服务（Google Analytics, 支付处理）
-   - 用户权利（GDPR, CCPA合规）
-   - 隐私咨询联系方式
+**可用页面**（通用模板）：
+1. `/privacy-policy` - 隐私政策
+2. `/terms-of-service` - 服务条款
+3. `/refund-policy` - 退款政策
 
-2. **Terms of Service**（服务条款）
-   - 服务描述
-   - 用户责任
-   - 知识产权
-   - 责任限制
-   - 争议解决
-   - 适用法律
+**工作原理**：
+- 所有法律页面自动从 `src/config/brand.config.ts` 读取品牌信息
+- 品牌名称、域名、联系邮箱、公司名称会动态插入
+- **创建新品牌时无需手动配置**
+- 页面位于 `src/app/(legal)/` 目录
 
-3. **Refund Policy**（退款政策）
-   - 退款资格（时间范围、条件）
-   - 退款流程
-   - 例外情况（数字商品、已使用积分）
-   - 处理时间
-   - 退款请求联系方式
+**自动填充的内容**：
+- 品牌名称：`{brandConfig.name}`
+- 域名：`{brandConfig.domain}`
+- 支持邮箱：`{brandConfig.contact.support}`
+- 公司名称：`{brandConfig.legal.companyName}`
 
-**实施步骤**：
+**验证步骤**：
+- [ ] 访问 `/privacy-policy` 验证品牌名称正确显示
+- [ ] 访问 `/terms-of-service` 验证品牌名称正确显示
+- [ ] 访问 `/refund-policy` 验证品牌名称正确显示
+- [ ] 检查Footer中的法律页面链接是否正常工作
 
-1. **创建路由文件**：
-   ```bash
-   mkdir -p src/app/[locale]/(default)/{privacy-policy,terms-of-service,refund-policy}
-   ```
+**可选自定义**（仅在需要时）：
+- 更新每个页面文件中的生效日期
+- 修改特定政策条款（需要法律审核）
+- 添加品牌特定的法律要求
 
-2. **创建i18n内容**：
-   ```bash
-   mkdir -p src/i18n/pages/{brand}/{privacy,terms,refund}
-   ```
+**行动**：验证法律页面显示正确的品牌信息，无需创建！
 
-3. **内容来源**：
-   - 使用现有品牌页面作为模板
-   - 使用工具生成初稿：TermsFeed, iubenda, Termly
-   - ⚠️ **重要**：发布前请法律专业人士审核
-
-4. **集成导航**：
-   - 在Footer组件添加链接
-   - 添加到sitemap
-   - 在注册/结账流程中包含（如需要）
+**重要提示**：
+- ✅ **无需重新创建** - 法律页面是品牌无关的
+- ✅ **自动适配** - 切换品牌后自动显示新品牌信息
+- ⚠️ **法律审核** - 虽然模板是通用的，但建议首次使用前由法律专业人士审核
+- 📝 **内容更新** - 如果业务模式变化，可能需要更新政策内容（需法律审核）
 
 ### Sitemap策略 🗺️（逐步添加）
 
@@ -666,8 +624,10 @@ Sitemap: https://{domain}/sitemap.xml
 | 2. 外部服务配置 | 30-60分钟 | 手动（按提醒清单） |
 | 3. 多语言翻译（主要） | 2-4小时 | 手动/AI辅助 |
 | 3. 多语言翻译（全部） | 1-2天 | 手动/专业服务 |
-| 4. 法律页面 | 2-4小时 | 模板+法律审核 |
-| **总计** | **1-3天** | **（取决于翻译范围）** |
+| 4. 法律页面验证 | 5-10分钟 | 自动（仅需验证） ✅ |
+| **总计** | **1-2天** | **（取决于翻译范围）** |
+
+**注意**：法律页面已实现为通用模板，无需创建，仅需验证！
 
 ## 快速启动清单
 
@@ -676,9 +636,11 @@ Sitemap: https://{domain}/sitemap.xml
 - [ ] 第1步：运行brand-switch skill → 自动完成配置+SEO
 - [ ] 第2步：查看提醒清单 → 完成Google OAuth/Analytics/域名/Logo/Yandex
 - [ ] 第3步：翻译en.json和zh.json → 测试两种主要语言
-- [ ] 第4步：创建Privacy/Terms/Refund页面 → 法律审核
+- [ ] 第4步：验证法律页面 → 确认Privacy/Terms/Refund显示正确 ✅
 - [ ] 第5步：提交sitemap到Google Search Console
 - [ ] 第6步：扩展剩余11种语言翻译（可选）
+
+**注意**：第4步已简化为仅验证，无需创建法律页面！
 
 ## 常见问题
 
@@ -686,7 +648,7 @@ Sitemap: https://{domain}/sitemap.xml
 
 **不可跳过**：
 - 第1步（品牌配置+SEO）- 核心功能
-- 第4步（法律页面）- 法律合规要求
+- 第4步（法律页面验证）- 虽然是自动的，但建议验证
 
 **可延后**：
 - 第3步部分语言 - 先完成en/zh，其他语言可后续添加
