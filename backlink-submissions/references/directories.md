@@ -56,6 +56,43 @@ Have these ready before submitting anywhere:
 - If required fields are missing (especially the upload), the form redirects to `?msg=ko`.
 - Success page is `https://wired.business/done`.
 - Backlink/badge is satisfied via the site footer “Partners” section linking to `https://wired.business`.
+- Submission pack values live in `references/site.md` under “Wired Business Submission Pack”.
+
+### Screenshot generation (no MCP)
+
+If you need a fresh homepage screenshot for upload, generate it locally with Playwright and upload the PNG:
+
+```bash
+NPM_CONFIG_CACHE=$PWD/.npm-cache PLAYWRIGHT_BROWSERS_PATH=0 npx -y playwright@1.50.1 screenshot http://chatgptimages.pro wired-chatgptimages.pro.png --viewport-size=1200,675
+```
+
+## Directory: Dofollow.Tools
+
+- Site: `https://dofollow.tools/`
+- Submit entry: `https://dofollow.tools/submit`
+
+### Required fields (Step 1: Tool Information)
+
+- Tool URL
+- Tool Name
+- Tagline (max shown: 160)
+- Description (min shown: 500, max 3000; markdown allowed)
+- Logo upload (PNG/JPG/WEBP; max shown: 500kb)
+- Screenshots (optional; up to 4; each < 5MB)
+- Categories (select up to 3)
+- Pricing Model (Free/Freemium/Paid)
+- Platforms (e.g. Web/iOS/Android/Desktop/Browser Extension)
+
+### Step 2: Submission Type
+
+- Paid plans: `One Time Pro ($9/Lifetime)`, `Monthly Promotion ($5/Month)`, `Featured Listing ($29/Month)`
+- Free listing requires:
+  - Add a dofollow backlink/badge to `https://dofollow.tools` in your website footer
+  - Review within 7 days
+
+### Important: Login required
+
+When clicking **Free** “Verify and Submit”, it redirects to `https://dofollow.tools/login` and requires authentication (Google/GitHub/Email).
 
 ## Submission Log
 
@@ -82,3 +119,16 @@ Have these ready before submitting anywhere:
 - Category: `Artificial Intelligence`
 - Email used: `1129190684@qq.com`
 - Upload used: `references/proofs/wired-business-2025-12-17.png`
+
+### Dofollow.Tools
+
+- Date: `2025-12-18`
+- Status: Blocked at login gate (`https://dofollow.tools/login`)
+- Proof screenshot: `references/proofs/dofollow-tools-login-required-2025-12-18.png`
+- Filled URL: `https://chatgptimages.pro/`
+- Name: `ChatGPT Images`
+- Categories selected: `Artificial intelligence`, `Image Generation & Editing`
+- Pricing model selected: `Freemium`
+- Platform selected: `Web`
+- Uploaded logo: `references/assets/logo.png`
+- Uploaded screenshots: `references/assets/homepage-1920x1080.png`, `references/assets/homepage-1200x630.png`
