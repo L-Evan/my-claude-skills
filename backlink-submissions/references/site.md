@@ -17,7 +17,8 @@
 
 Public (OK for directory upload / scraping):
 - Logo (square PNG): `https://chatgptimages.pro/logo.png` (512×512)
-- Logo (local file for upload forms): `references/assets/logo.png`
+- Logo (local file for upload forms, black/white): `references/assets/logo.png`
+- Logo (local file, color): `references/assets/logo-color.png`
 - Icon: `https://chatgptimages.pro/icon.png`
 - Apple touch icon: `https://chatgptimages.pro/apple-icon.png`
 
@@ -25,9 +26,15 @@ Public (OK for directory upload / scraping):
 
 Use these when a directory asks for a “promo image / screenshot / banner”:
 
-- `references/assets/homepage-1920x1080.png` (desktop hero / above-the-fold)
-- `references/assets/homepage-1200x630.png` (OG-style 1.91:1)
-- `references/assets/homepage-full.png` (full page)
+- Prefer **different pages/sections** (don’t upload 4 near-identical screenshots).
+- Recommended set for “up to 4 screenshots”:
+  - `references/assets/homepage-1920x1080.png` (hero / above-the-fold)
+  - `references/assets/section-generator-1920x1080.png` (generator section)
+  - `references/assets/section-gallery-1920x1080.png` (gallery section)
+  - `references/assets/section-pricing-1920x1080.png` (pricing section)
+- Optional formats:
+  - `references/assets/homepage-1200x630.png` (OG-style 1.91:1)
+  - `references/assets/homepage-full.png` (full page)
 
 Not usable for directory submissions:
 - `http://localhost:3000/logo.png` (only works on your computer)
